@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+</head>
+<body>
+
+    <form id="myForm">
+        <p><input type="number" size="3" name="index" id="idx" value="1" step="1"></p>
+        <p><label for="first_name">First Name:</label>
+        <input type="text" name="fname" id="fname" value="Ivan"></p>
+
+        <p><label for="last_name">Last Name:</label>
+        <input type="text" name="lname" id="lname" value="Ivanov"></p>
+
+        <input value="Submit" type="submit">
+    </form>
+<script type="text/javascript">
+    (function($) {
+        function processForm(event) {
+            var url = 'api/' + document.getElementById('idx').value;
+
+            $.ajax({
+                type:"post",
+                url: url,
+                dataType:'json',
+                contentType: "application/json",
+                data:JSON.stringify({"first_name": $('#fname').val(), "last_name": $('#lname').val()}),
+                success: function(data){
+                    alert("ok");
+                    document.getElementById("idx").stepUp();
+                    $("#lname").val("");
+                    $("#fname").val("");
+                    $("#fname").focus();
+                },
+                error:function(data,error,desc){
+                    alert(data.responseJSON['error']);
+                    $("#fname").focus();
+                }
+            });
+            event.preventDefault();
+
+        }
+        $('#myForm').submit(processForm)
+    })(jQuery);
+
+</script>
+</body>
+</html>
